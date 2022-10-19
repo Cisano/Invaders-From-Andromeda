@@ -526,14 +526,8 @@ initializingMainVariables
 	sta Direction
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 NextFrame
-	lda #2
-	sta VSYNC
-	;3 scanlines of VSYNCH signal...
-	sta WSYNC
-	sta WSYNC
-	sta WSYNC
-	lda #0
-	sta VSYNC
+	VERTICAL_SYNC
+
 	sta HMCLR
 
 	;set zero Cursor
