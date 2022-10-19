@@ -90,5 +90,5 @@
     sta GRP0
     sta GRP1
 
-    ldx #176 ;scanline on exit
+    ldx #177 ;scanline on exit
     ENDM
