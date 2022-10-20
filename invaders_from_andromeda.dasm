@@ -297,7 +297,7 @@ FirstInvaderColor
 	.byte $C8
 	.byte $C2
 	.byte $C2
-	.byte $Cf ;$1E
+	.byte $Ce
 SecondInvaderColor
 	.byte $20
 	.byte $22
