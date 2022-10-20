@@ -1269,7 +1269,7 @@ horizonPlanet
 
 setParametersPlanet
 	sta WSYNC
-	lda #$92
+	lda #ColorPlanet
 	sta COLUBK
 	lda #ColorLandPlanet
 	sta COLUPF
