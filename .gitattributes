@@ -1,2 +1,2 @@
 *.h linguist-detectable=false
-*.dasm linguist-detectable=true
+*.dasm linguist-language=Assembly
