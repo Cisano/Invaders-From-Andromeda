@@ -501,7 +501,7 @@ TableSoundsHi
 	.byte #>InvadersMarch, #>Fire, #>InvaderExplosion, #>UfoHit, #>SpaceShipHit, #>VictorySongCh0, #>VictorySongCh1
 
 TableNusiz
-		  ;0    1    2    3    4    5    6    7
+	      ;0   1    2    3    4    5    6    7
 	.byte #0, #0,  #0,  #1,  #0,  #2,  #1,  #3
 TableOffsetInvaders
 	.byte #0, #32, #16, #16, #0, #0, #0, #0 ;for NUSIZX
