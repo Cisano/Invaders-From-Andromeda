@@ -28,9 +28,6 @@
 ; Define Constants
 ;===============================================================================
 
-; comment/uncomment to build the version you want
-COMPILE_VERSION = PAL
-
 Volume0 = 4
 Volume1 = 6
 LeftLimitSpaceShip = 30
