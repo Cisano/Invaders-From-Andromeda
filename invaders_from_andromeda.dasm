@@ -22,7 +22,6 @@
 	include "energy_macro.h"
 	include "joystick_macro.h"
 	include "timer.h"
-	org $f000
 
 Volume0 = #4
 Volume1 = #6
@@ -53,6 +52,136 @@ ColorEndGame = #$46
 LastLevelEndGame = #10
 RightLimitBarriers = #56
 LeftLimitBarriers = #40
+
+;===============================================================================
+; Define Zero Page RAM Usage
+;----------------------------------------
+; ZP RAM variables can only be seen by the 6507 CPU.
+; C variables can only be seen by the ARM CPU.
+; The 4K Display Data bank is used for any variables both CPUs need access to.
+;===============================================================================
+
+        SEG.U VARS
+        ORG $80             
+        
+ echo "----",($00FE - *) , "bytes of RAM left (space reserved for 2 byte stack)"
+
+; dgs - use DS to define # of bytes for storage.
+;       ShieldNumber will end up in $80
+;       InvadersLine0 in $81
+;       etc
+	
+ShieldNumber ds 1
+InvadersLine0 ds 1
+InvadersLine1 ds 1
+InvadersLine2 ds 1
+InvadersLine3 ds 1
+InvadersLine4 ds 1
+OffsetXInvaders ds 1
+CoordXInvaders ds 1
+CoordYInvaders ds 1
+CursorLeftInvaders ds 1
+CursorRightInvaders ds 1
+CursorRowInvaders ds 1
+CursorColumnInvaders ds 1
+CursorSpringLeftRight ds 1
+CursorYMissile1 ds 1
+CursorYMissile2 ds 1
+CoordXSpaceShip ds 1
+CoordXUfo ds 1
+PointerGRP0Low ds 1
+PointerGRP0Hi ds 1
+PointerGRP1Low ds 1
+PointerGRP1Hi ds 1
+PntrColorGRPLow ds 1
+PntrColorGRPHi ds 1
+PointerNumberLow ds 1
+PointerNumberHi ds 1
+PointerGFXPlanet ds 1
+Temp ds 1
+TempX ds 1
+Tmp ds 1
+TimerForAll ds 1
+BooleanGameOver ds 1 ;if 0 then game over
+BooleanAtBeginOfEveryLevel ds 1
+BooleanShiftInvadersColumn ds 1
+CursorYBallSpaceShip ds 1
+CoordXBallSpaceShip ds 1
+BooleanFireSpaceShip ds 1
+BooleanHitInvader ds 1
+BooleanFirePressed ds 1
+UfoCollision ds 1
+CollisionInvader ds 1
+
+ArrayPointerGRP0Line0 ds 1
+ArrayPointerGRP0Line1 ds 1
+ArrayPointerGRP0Line2 ds 1
+ArrayPointerGRP0Line3 ds 1
+ArrayPointerGRP0Line4 ds 1
+ArrayPointerGRP1Line0 ds 1
+ArrayPointerGRP1Line1 ds 1
+ArrayPointerGRP1Line2 ds 1
+ArrayPointerGRP1Line3 ds 1
+ArrayPointerGRP1Line4 ds 1
+
+BooleanGRP1AllGone ds 1
+
+CursorSound0 ds 1
+CursorSound1 ds 1
+TempoCH0 ds 1
+TempoCH1 ds 1
+
+MarchSequencer ds 1
+TimerTitleScreen ds 1
+ActiveInvadersLines ds 1
+
+Bullet ds 1
+TimerShiftInvadersColumn ds 1
+StepBall ds 1
+CurosorMaskInvaders ds 1
+TimerMask ds 1
+TotalInvaders ds 1
+AlternateFrameInvader ds 1
+
+PointerSpaceShipLow ds 1
+PointerSpaceShipHi ds 1
+
+CoordYMissile1 ds 1
+CoordYMissile2 ds 1
+
+TimerWhenInvaderStrike ds 1
+CursorWhoBombs ds 1
+
+CoordXMissile1 ds 1
+CoordXMissile2 ds 1
+
+BooleanNoBulletInGame ds 1
+BooleanShieldLost ds 1
+
+LevelNumber ds 1 ;incremented in FIND_HIT_INVADER_MACRO
+LevelBarriers ds 1
+PowerSingleBarrier ds 1
+DefineBarriers ds 1
+MaskDeleteBarrier ds 1
+
+PointerGRP1UfoLow ds 1
+PointerGRP1UfoHi ds 1
+
+BooleanVictorySongCh1 ds 1
+
+KindOfBarriers ds 1
+Direction ds 1
+CoordXBarries ds 1
+
+SoundDataLow ds 1
+SoundDataH ds 1
+SoundMarchDataLow ds 1
+SoundMarchDataHi ds 1
+
+BooleanVictorySongCh0 ds 1
+	
+    SEG CODE
+	org $f000
 
 ;---Graphics Data---
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -340,117 +469,6 @@ FifthInvaderColor
 	.byte $A6
 	.byte $A6
 	.byte #ColorMissiles ;nice trick, grp1 missile and missile1 color
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-ShieldNumber equ $80
-InvadersLine0 equ $81
-InvadersLine1 equ $82
-InvadersLine2 equ $83
-InvadersLine3 equ $84
-InvadersLine4 equ $85
-OffsetXInvaders equ $86
-CoordXInvaders equ $87
-CoordYInvaders equ $88
-CursorLeftInvaders equ $89
-CursorRightInvaders equ $8a
-CursorRowInvaders equ $8b
-CursorColumnInvaders equ $8c
-CursorSpringLeftRight equ $8d
-CursorYMissile1 equ $8ec
-CursorYMissile2 equ $8f
-CoordXSpaceShip equ $90
-CoordXUfo equ $91
-PointerGRP0Low equ $92
-PointerGRP0Hi equ $93
-PointerGRP1Low equ $94
-PointerGRP1Hi equ $95
-PntrColorGRPLow equ $96
-PntrColorGRPHi equ $97
-PointerNumberLow equ $98
-PointerNumberHi equ $99
-PointerGFXPlanet equ $9a
-Temp equ $9b
-TempX equ $9c
-Tmp equ $9d
-TimerForAll equ $9e
-BooleanGameOver equ $9f ;if 0 then game over
-BooleanAtBeginOfEveryLevel equ $a0
-BooleanShiftInvadersColumn equ $a1
-CursorYBallSpaceShip equ $a2
-CoordXBallSpaceShip equ $a3
-BooleanFireSpaceShip equ $a4
-BooleanHitInvader equ $a5
-BooleanFirePressed equ $a6
-UfoCollision equ $a7
-CollisionInvader equ $a8
-
-ArrayPointerGRP0Line0 equ $a9
-ArrayPointerGRP0Line1 equ $aa
-ArrayPointerGRP0Line2 equ $ab
-ArrayPointerGRP0Line3 equ $ac
-ArrayPointerGRP0Line4 equ $ad
-ArrayPointerGRP1Line0 equ $ae
-ArrayPointerGRP1Line1 equ $af
-ArrayPointerGRP1Line2 equ $b0
-ArrayPointerGRP1Line3 equ $b1
-ArrayPointerGRP1Line4 equ $b2
-
-BooleanGRP1AllGone equ $b3
-
-CursorSound0 equ $b4
-CursorSound1 equ $b5
-TempoCH0 equ $b6
-TempoCH1 equ $b7
-
-MarchSequencer equ $b8
-TimerTitleScreen equ $b9
-ActiveInvadersLines equ $ba
-
-Bullet equ $bb
-TimerShiftInvadersColumn equ $bc
-StepBall equ $bd
-CurosorMaskInvaders equ $be
-TimerMask equ $bf
-TotalInvaders equ $c0
-AlternateFrameInvader equ $c1
-
-PointerSpaceShipLow equ $c2
-PointerSpaceShipHi equ $c3
-
-CoordYMissile1 equ $c4
-CoordYMissile2 equ $c5
-
-TimerWhenInvaderStrike equ $c6
-CursorWhoBombs equ $c7
-
-CoordXMissile1 equ $c8
-CoordXMissile2 equ $c9
-
-BooleanNoBulletInGame equ $ca
-BooleanShieldLost equ $cb
-
-LevelNumber equ $cc ;incremented in FIND_HIT_INVADER_MACRO
-LevelBarriers equ $cd
-PowerSingleBarrier equ $ce
-DefineBarriers equ $cf
-MaskDeleteBarrier equ $d0
-
-PointerGRP1UfoLow equ $d1
-PointerGRP1UfoHi equ $d2
-
-BooleanVictorySongCh1 equ $d3
-
-KindOfBarriers equ $d4
-Direction equ $d5
-CoordXBarries equ $d6
-
-SoundDataLow equ $d7
-SoundDataHi equ $d8
-SoundMarchDataLow equ $d9
-SoundMarchDataHi equ $da
-
-BooleanVictorySongCh0 equ $db
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 TablePtrNumbLow
 	.byte #<Number0, #<Number1, #<Number2, #<Number3, #<Number4, #<Number5
